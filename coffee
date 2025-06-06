@@ -24,8 +24,8 @@
             // Optionally read a response body here
             const resultText = await response.text();
             document.body.innerHTML = `
-              <p>✅ Coffee pods have been requested. Thank you!</p>
-              <pre style="opacity:0.5;">${resultText}</pre>
+              <h3>Success</h3>
+              <pre>${resultText}</pre>
             `;
           } else {
             // Show error status
