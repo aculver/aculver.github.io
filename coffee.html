@@ -1,23 +1,33 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Coffee Pod Request</title>
-    <meta charset="UTF-8">
+    <title>Requesting Coffee Pods...</title>
     <script>
+      function getQueryParam(name) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(name);
+      }
+
       window.onload = () => {
+        const secret = getQueryParam("key");
+
         fetch("https://prod-129.westus.logic.azure.com:443/workflows/6813362debc14d0091d93d1b2cd4054c/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=BZI7DMf0A-kN5zAttafHRcdB-fzRSA3g4MzeDvK09_0", {
-          method: "POST"
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ secret })
         })
         .then(() => {
-          document.getElementById("message").textContent = "✅ Coffee pods have been requested. Thank you!";
+          document.body.innerHTML = "<p>✅ Coffee pods have been requested. Thank you!</p>";
         })
         .catch(() => {
-          document.getElementById("message").textContent = "⚠️ Failed to send the request. Please try again.";
+          document.body.innerHTML = "<p>⚠️ Failed to send request. Please try again.</p>";
         });
       };
     </script>
   </head>
   <body>
-    <p id="message">Requesting coffee pods…</p>
+    <p>Sending request...</p>
   </body>
 </html>
