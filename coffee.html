@@ -2,6 +2,7 @@
 <html>
   <head>
     <title>Requesting Coffee Pods...</title>
+    <meta charset="UTF-8" />
     <script>
       function getQueryParam(name) {
         const urlParams = new URLSearchParams(window.location.search);
@@ -18,11 +19,28 @@
           },
           body: JSON.stringify({ secret })
         })
-        .then(() => {
-          document.body.innerHTML = "<p>✅ Coffee pods have been requested. Thank you!</p>";
+        .then(async response => {
+          if (response.ok) {
+            // Optionally read a response body here
+            const resultText = await response.text();
+            document.body.innerHTML = `
+              <p>✅ Coffee pods have been requested. Thank you!</p>
+              <pre style="opacity:0.5;">${resultText}</pre>
+            `;
+          } else {
+            // Show error status
+            const errorText = await response.text();
+            document.body.innerHTML = `
+              <p>⚠️ Request failed with status ${response.status}</p>
+              <pre style="opacity:0.5;">${errorText}</pre>
+            `;
+          }
         })
-        .catch(() => {
-          document.body.innerHTML = "<p>⚠️ Failed to send request. Please try again.</p>";
+        .catch(error => {
+          document.body.innerHTML = `
+            <p>❌ Could not send the request. Please try again later.</p>
+            <pre style="opacity:0.5;">${error}</pre>
+          `;
         });
       };
     </script>
@@ -31,3 +49,4 @@
     <p>Sending request...</p>
   </body>
 </html>
+
